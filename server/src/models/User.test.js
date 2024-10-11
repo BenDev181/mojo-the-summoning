@@ -19,22 +19,22 @@ beforeAll(async () => {
     name: 'Alaric Flamecaller',
     mojo: 100,
     stamina: 10,
-    imgUrl: 'http://localhost:5000/img/alaric-flamecaller.jpg'
+    imgUrl: 'http://localhost:5000/img/alaric-flamecaller.jpg',
   })
   card2 = await Card.create({
     name: 'Theron Thunderstrike',
     mojo: 100,
     stamina: 10,
-    imgUrl: 'http://localhost:5000/img/theron-thunderstrike.jpg'
+    imgUrl: 'http://localhost:5000/img/theron-thunderstrike.jpg',
   })
   attack1 = await Attack.create({ title: "Fireball", mojoCost: 30, staminaCost: 25 })
   attack2 = await Attack.create({ title: "Thunderbolt", mojoCost: 20, staminaCost: 10 })
 })
 
 // clear db after tests
-afterAll(async () => await db.sync({ force: true }))
+//afterAll(async () => await db.sync({ force: true }))
 
-describe('Models Creattion', () => {
+describe('Models Tests', () => {
   test('User entries contain properties', async () => {
     expect(user).toHaveProperty('id')
     expect(user.username).toBe('gandalf')
@@ -57,9 +57,28 @@ describe('Models Creattion', () => {
 })
 
 describe('Association Tests', () => {
-  test('User entries contain properties', async () => {
-    expect(user).toHaveProperty('id')
-    expect(user.username).toBe('gandalf')
+  test('User can only have one deck', async () => {
+    await user.setDeck(deck)
+    const userDeck = await user.getDeck()
+    expect(userDeck.id).toBe(deck.id)
+  })
+
+  test('Deck can have multiple cards', async () => {
+    await deck.addCard(card1)
+    await deck.addCard(card2)
+
+    const deckCards = await deck.getCards()
+    expect(deckCards instanceof Card).toBeTruthy; 
+  })
+
+  test('Cards can have multiple attacks', async () => {
+    await card1.addAttack(attack1)
+    await card1.addAttack(attack2)
+
+    const cardAttacks = await card1.getAttacks()
+    console.log(cardAttacks)
+    
+    expect(cardAttacks.length).toBe(2);
   })
 
 
