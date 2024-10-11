@@ -1,17 +1,18 @@
 // create your User model here
 const { db, DataTypes, Model } = require("../db/config.js");
 
-class User extends Model {};
+class Deck extends Model {};
 
-User.init({
+Deck.init({
     id: {
         type: DataTypes.INTEGER,
         primaryKey: true
     },
-    username: DataTypes.STRING,
+    name: DataTypes.STRING,
+    xp: DataTypes.INTEGER
 }, {
     sequelize: db,
-    modelName: "User"
+    modelName: "Deck"
 });
 
-module.exports = {User};
+module.exports = Deck;
